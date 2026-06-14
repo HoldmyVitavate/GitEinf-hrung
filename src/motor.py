@@ -15,6 +15,7 @@ PWM_MAX_VALUE = 0xFFFF
 MAX_SPEED_PERCENT = 100
 PCA_FREQUENCY = 50
 TOTAL_CHANNELS = 16
+START_VALUE = 0
 
 try:
     with open("config.json", "r") as f:
@@ -41,7 +42,7 @@ def init():
 
 def stop_all():
     for ch in range(TOTAL_CHANNELS):
-        pca.channels[ch].duty_cycle = 0
+        pca.channels[ch].duty_cycle = START_VALUE
 
 
 def _set_motor(channel_a, channel_b, speed):
@@ -52,11 +53,11 @@ def _set_motor(channel_a, channel_b, speed):
     motor_speed = int((abs(speed) * PWM_MAX_VALUE) / MAX_SPEED_PERCENT)
 
     if speed >= 0:
-        pca.channels[channel_a].duty_cycle = 0
+        pca.channels[channel_a].duty_cycle = START_VALUE
         pca.channels[channel_b].duty_cycle = motor_speed
     else:
         pca.channels[channel_a].duty_cycle = motor_speed
-        pca.channels[channel_b].duty_cycle = 0
+        pca.channels[channel_b].duty_cycle = START_VALUE
 
 
 def front_left(speed=0):
